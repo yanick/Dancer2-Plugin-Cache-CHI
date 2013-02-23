@@ -1,0 +1,43 @@
+This file contains message digests of all files listed in MANIFEST,
+signed via the Module::Signature module, version 0.68.
+
+To verify the content in this distribution, first make sure you have
+Module::Signature installed, then type:
+
+    % cpansign -v
+
+It will check each file's integrity, as well as the signature's
+validity.  If "==> Signature verified OK! <==" is not displayed,
+the distribution may already have been compromised, and you should
+not run its Makefile.PL or Build.PL.
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+SHA1 4c155391dc709e44e2b9eb254c219400b1cec9ef AUTHOR_PLEDGE
+SHA1 6a85999f9625403ac33be1e3bbcbae971e26d9c9 Build.PL
+SHA1 b1e855d838fc5e35f3d3cadbcf8e589f0477147e Changes
+SHA1 1d29132bef2639b9859e6ecf2f431b85987f536f INSTALL
+SHA1 cf5dc9c929415cfa7133eed863def866ade9774d LICENSE
+SHA1 71e77d01e457b2ddd5d7a5ab3e5556f5ad9cbf1c MANIFEST
+SHA1 48fabb73c79e050ec9d854cbcf8dffdc7af6de13 META.json
+SHA1 50d2539fcde76023bce77b0a0ba7911eb5249f07 META.yml
+SHA1 e6a3adac020971399d445bcf1efd32dc17adaa1f README
+SHA1 06c563666ed7b0d1a0e30b1ad5e1df6e64299ec6 README.mkdn
+SHA1 d51a301a22fdde787bba6d973de42f4bf4400cb8 lib/Dancer2/Plugin/Cache/CHI.pm
+SHA1 3cbe905b92fbc69d59a06031d5ce6c837b352aa2 t/00-compile.t
+SHA1 c3d09fbd1b1333271cb88ab68f9e457b48e4a458 t/000-report-versions-tiny.t
+SHA1 673201a773c6f7772853336409223ac5ecc3ac66 t/TestApp.pm
+SHA1 daed2a290865f1942632d5b46084c50f0628b954 t/basic.t
+SHA1 e9c4d3be48f00ff83268e1c527fa98b31ae62aa3 t/honor-no-cache.t
+SHA1 d885da01c6fa3015ea88f9ef665d45a8a22cd655 t/hooks.t
+SHA1 9f5d1ccea6d811bd094b7c249a190993848126bf t/key-gen.t
+SHA1 17a416901c6e1ce3b69067db2b99137706dde94b t/namespaces.t
+SHA1 ec3f84bfd7a9ce3246e7592f4134100c6b5ce02b xt/release/unused-vars.t
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.11 (GNU/Linux)
+
+iEYEARECAAYFAlEpLyoACgkQ34Hwf+GwC4wFMACfTQV9+fzDzwBHrvP5xc2KZASY
+m3kAn11Z/UYN0s2RBS1JHhrL8NFGxxtI
+=6WQe
+-----END PGP SIGNATURE-----

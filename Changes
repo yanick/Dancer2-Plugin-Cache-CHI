@@ -1,18 +1,11 @@
 Revision history for Dancer2::Plugin::Cache::CHI
 
-{{$NEXT}}
- [API CHANGES]
-
- [BUG FIXES]
-
- [DOCUMENTATION]
-
+1.5.0 2013-02-23
  [ENHANCEMENTS]
  - Forking Dancer::Plugin::Cache::CHI into its Dancer2 incarnation
 
- [NEW FEATURES]
-
  [STATISTICS]
+ - code churn: 13 files changed, 356 insertions(+), 393 deletions(-)
 
 1.4.0 2013-01-07
  [ENHANCEMENTS]
