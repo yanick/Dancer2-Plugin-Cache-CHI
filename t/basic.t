@@ -7,7 +7,7 @@ use Test::More;
 
 use TestApp;
 
-use Dancer::Test apps => [ 'TestApp' ];
+use Dancer2::Test apps => [ 'TestApp' ];
 
 plan tests => 24;
 

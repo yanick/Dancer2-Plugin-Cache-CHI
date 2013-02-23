@@ -10,13 +10,10 @@ use lib 't';
 
 use Test::More;
 
-use Dancer qw/:tests/;
-use Dancer::Plugin::Cache::CHI;
+use Dancer2 qw/:tests/;
+use Dancer2::Plugin::Cache::CHI;
 
-use Dancer::Test;
-
-my $api_version = int Dancer->VERSION;
-
+use Dancer2::Test;
 
 set plugins => {
     'Cache::CHI' => { 
@@ -55,13 +52,7 @@ subtest $_ => sub {
 sub non_cached_request {
     my $header = $_;
 
-    if ( $api_version < 2 ) {
-        return dancer_response 'GET' => '/cached', {
-            headers => [ $header => 'no-cache' ],
-        };
-    }
-
-    my $request = Dancer::Core::Request->new(
+    my $request = Dancer2::Core::Request->new(
         method => 'GET',
         path => '/cached',
     );

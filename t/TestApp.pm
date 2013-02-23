@@ -4,8 +4,8 @@ package
 use strict;
 use warnings;
 
-use Dancer ':syntax';
-use Dancer::Plugin::Cache::CHI;
+use Dancer2 ':syntax';
+use Dancer2::Plugin::Cache::CHI;
 
 set plugins => {
     'Cache::CHI' => { driver => 'Memory', global => 1, expires_in => '1 min' },

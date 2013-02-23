@@ -5,11 +5,12 @@ use warnings;
 
 use lib 't';
 
-use Dancer qw/:syntax :tests/;
-use Dancer::Plugin::Cache::CHI;
-
-use Dancer::Test;
 use Test::More;
+
+use Dancer2 qw/:syntax :tests /;
+use Dancer2::Plugin::Cache::CHI;
+
+use Dancer2::Test;
 
 set plugins => {
     'Cache::CHI' => { driver => 'Memory', global => 1, expires_in => '1 min' },

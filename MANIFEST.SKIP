@@ -6,5 +6,5 @@ bak$
 tmp$
 \.prove
 MANIFEST.SKIP
-Dancer-Plugin-Cache
+Dancer2-Plugin-Cache
 .gitignore
