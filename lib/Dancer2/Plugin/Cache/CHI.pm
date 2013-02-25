@@ -5,10 +5,10 @@ use strict;
 use warnings;
 no warnings qw/ uninitialized /;
 
-use Dancer2 ':syntax';
-
 use Carp;
 use CHI;
+
+use Dancer2 ':syntax';
 
 use Dancer2::Plugin;
 

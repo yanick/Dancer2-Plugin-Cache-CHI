@@ -10,7 +10,6 @@ README
 README.mkdn
 SIGNATURE
 lib/Dancer2/Plugin/Cache/CHI.pm
-t/00-compile.t
 t/000-report-versions-tiny.t
 t/TestApp.pm
 t/basic.t
