@@ -7,8 +7,6 @@ no warnings qw/ uninitialized /;
 
 use Dancer2 ':syntax';
 
-use Moo;
-
 use Carp;
 use CHI;
 
