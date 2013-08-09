@@ -8,3 +8,4 @@ tmp$
 MANIFEST.SKIP
 Dancer2-Plugin-Cache
 .gitignore
+.travis.yml
