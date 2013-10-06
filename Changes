@@ -1,19 +1,12 @@
 Revision history for Dancer2::Plugin::Cache::CHI
 
-{{$NEXT}}
- [API CHANGES]
-
+1.5.2 2013-10-06
  [BUG FIXES]
- - Make the plugin compatible with Dancer2 v0.10. 
-    (GH#i2, GH3, reported by sukria)
-
- [DOCUMENTATION]
-
- [ENHANCEMENTS]
-
- [NEW FEATURES]
+ - Make the plugin compatible with Dancer2 v0.10.  (GH#i2, GH3, reported by
+   sukria)
 
  [STATISTICS]
+ - code churn: 9 files changed, 74 insertions(+), 27 deletions(-)
 
 1.5.1 2013-02-25
  [BUG FIXES]
