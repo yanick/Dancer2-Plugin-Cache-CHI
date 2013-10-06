@@ -10,7 +10,7 @@ use lib 't';
 
 use Test::More;
 
-use Dancer2 qw/:tests/;
+use Dancer2;
 use Dancer2::Plugin::Cache::CHI;
 
 use Dancer2::Test;

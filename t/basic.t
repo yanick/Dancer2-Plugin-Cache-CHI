@@ -30,7 +30,11 @@ response_status_is [ 'GET', '/clear' ], 200, '/clear';
 response_content_is [ 'GET', '/cached' ], 3, '/cached (cleared)';
 
 my $secret = 'flamingo';
-my $resp = dancer_response PUT => '/stash', { body => $secret };
+my $resp = dancer_response( Dancer2::Core::Request->new(
+    method => 'PUT',
+    path => '/stash',
+    body => $secret,
+));
 
 is $resp->status => 200, 'secret stashed';
 

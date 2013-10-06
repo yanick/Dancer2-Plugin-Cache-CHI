@@ -4,7 +4,7 @@ package
 use strict;
 use warnings;
 
-use Dancer2 ':syntax';
+use Dancer2;
 use Dancer2::Plugin::Cache::CHI;
 
 set plugins => {
