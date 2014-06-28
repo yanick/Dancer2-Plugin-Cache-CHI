@@ -17,8 +17,8 @@ In your configuration:
 
 In your application:
 
-    use Dancer2 ':syntax';
-    use Dancer::Plugin::Cache::CHI;
+    use Dancer2;
+    use Dancer2::Plugin::Cache::CHI;
 
     # caching pages' response
 
