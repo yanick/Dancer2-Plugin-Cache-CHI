@@ -1,5 +1,4 @@
-package
-    TestApp;
+package TestApp;
 
 use strict;
 use warnings;
@@ -62,10 +61,9 @@ hook before => sub {
 };
 
 get '/clear_headers' => sub { $headers = 0 };
+
 get '/headers' => sub {
     cache_page 'gonzo';
 };
-
-
 
 1;
