@@ -4,6 +4,7 @@ Revision history for Dancer2::Plugin::Cache::CHI
  [API CHANGES]
 
  [BUG FIXES]
+ - Have the plugin use the right DSL. (GH#5, reported by Kim Hansen)
 
  [DOCUMENTATION]
 
@@ -16,7 +17,7 @@ Revision history for Dancer2::Plugin::Cache::CHI
 
 1.5.2 2013-10-06
  [BUG FIXES]
- - Make the plugin compatible with Dancer2 v0.10.  (GH#i2, GH3, reported by
+ - Make the plugin compatible with Dancer2 v0.10.  (GH#2, GH3, reported by
    sukria)
 
  [STATISTICS]
