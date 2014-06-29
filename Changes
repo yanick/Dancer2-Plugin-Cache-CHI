@@ -1,19 +1,14 @@
 Revision history for Dancer2::Plugin::Cache::CHI
 
-{{$NEXT}}
- [API CHANGES]
-
+1.6.0 2014-06-28
  [BUG FIXES]
  - Have the plugin use the right DSL. (GH#5, reported by Kim Hansen)
-
- [DOCUMENTATION]
 
  [ENHANCEMENTS]
  - Move tests away from Dancer2::Test and to Test::Plack. (Kim Hansen)
 
- [NEW FEATURES]
-
  [STATISTICS]
+ - code churn: 10 files changed, 240 insertions(+), 195 deletions(-)
 
 1.5.2 2013-10-06
  [BUG FIXES]

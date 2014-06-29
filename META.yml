@@ -1,0 +1,46 @@
+---
+abstract: 'Dancer plugin to cache response content (and anything else)'
+author:
+  - 'Yanick Champoux <yanick@cpan.org>'
+build_requires:
+  HTTP::Request::Common: '0'
+  Module::Build: '0.3601'
+  Plack::Test: '0'
+  Test::More: '0.88'
+  lib: '0'
+  perl: v5.10.0
+configure_requires:
+  Module::Build: '0.3601'
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 5.016, CPAN::Meta::Converter version 2.140640'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: '1.4'
+name: Dancer2-Plugin-Cache-CHI
+provides:
+  Dancer2::Plugin::Cache::CHI:
+    file: lib/Dancer2/Plugin/Cache/CHI.pm
+    version: v1.6.0
+requires:
+  CHI: '0'
+  Carp: '0'
+  Dancer2: '0.140001'
+  Dancer2::Plugin: '0'
+  Moo: '1.000007'
+  strict: '0'
+  warnings: '0'
+resources:
+  bugtracker: https://github.com/yanick/Dancer2-Plugin-Cache-CHI/issues
+  homepage: http://search.cpan.org/dist/Dancer2-Plugin-Cache-CHI/
+  repository: https://github.com/yanick/Dancer2-Plugin-Cache-CHI.git
+version: 1.6.0
+x_author_pledge:
+  version: 1
+x_authority: cpan:YANICK
+x_contributors:
+  - 'Alexis Sukrieh <sukria@cpan.org>'
+  - 'David Precious <davidp@preshweb.co.uk>'
+  - 'Franck Cuny <franck@lumberjaph.net>'
+  - 'Kim Hansen <kim@rthansen.dk>'
+  - 'Perlover <perlover@perlover.com>'
