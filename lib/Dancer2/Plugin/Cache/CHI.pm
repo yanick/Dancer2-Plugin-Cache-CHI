@@ -27,8 +27,8 @@ In your configuration:
 
 In your application:
 
-    use Dancer2 ':syntax';
-    use Dancer::Plugin::Cache::CHI;
+    use Dancer2;
+    use Dancer2::Plugin::Cache::CHI;
 
     # caching pages' response
 
@@ -184,7 +184,7 @@ register check_page_cache => sub {
         my $context = shift;
 
         # Instead halt() now we use a more correct method - setting of a
-        # response to Dancer::Response object for a more correct returning of
+        # response to Dancer2::Core::Response object for a more correct returning of
         # some HTTP headers (X-Powered-By, Server)
 
         my $cached = cache()->get( $cache_page_key_generator->($dsl) )

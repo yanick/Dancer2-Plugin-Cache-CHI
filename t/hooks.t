@@ -1,29 +1,33 @@
-package TestApp;
-
 use strict;
 use warnings;
 
-use lib 't';
+use Test::More tests => 2;
+use Plack::Test;
+use HTTP::Request::Common;
 
-use Test::More;
+{
+    package TestApp;
+    use Dancer2;
+    use Dancer2::Plugin::Cache::CHI;
 
-use Dancer2 qw/:syntax :tests /;
-use Dancer2::Plugin::Cache::CHI;
+    set plugins => {
+        'Cache::CHI' => { driver => 'Memory', global => 1, expires_in => '1 min' },
+    };
 
-use Dancer2::Test;
+    hook before_create_cache => sub {
+        config->{plugins}{'Cache::CHI'}{namespace} = 'Foo';
+    };
 
-set plugins => {
-    'Cache::CHI' => { driver => 'Memory', global => 1, expires_in => '1 min' },
-};
+    get '/namespace' => sub {
+        cache->namespace;
+    };
+}
 
-hook before_create_cache => sub {
-    config->{plugins}{'Cache::CHI'}{namespace} = 'Foo';
-};
+my $app = Dancer2->runner->psgi_app;
+is ref $app, 'CODE', 'got app';
 
-get '/namespace' => sub {
-    cache->namespace;
-};
+test_psgi $app, sub {
+    my $cb  = shift;
 
-plan tests => 1;
-
-response_content_is '/namespace', 'Foo', 'namespace configured';
+    is $cb->(GET '/namespace')->content, 'Foo', 'namespace configured';
+}

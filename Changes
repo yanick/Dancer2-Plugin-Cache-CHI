@@ -8,6 +8,7 @@ Revision history for Dancer2::Plugin::Cache::CHI
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+ - Move tests away from Dancer2::Test and to Test::Plack. (Kim Hansen)
 
  [NEW FEATURES]
 
