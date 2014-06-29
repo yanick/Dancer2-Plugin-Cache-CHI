@@ -8,7 +8,7 @@ no warnings qw/ uninitialized /;
 use Carp;
 use CHI;
 
-use Dancer2 0.10;
+use Dancer2 0.140001;
 
 use Dancer2::Plugin;
 

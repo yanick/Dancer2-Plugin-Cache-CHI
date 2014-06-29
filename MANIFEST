@@ -16,6 +16,7 @@ t/TestApp.pm
 t/basic.t
 t/honor-no-cache.t
 t/hooks.t
+t/init-check-page-cache.t
 t/key-gen.t
 t/namespaces.t
 xt/release/unused-vars.t
