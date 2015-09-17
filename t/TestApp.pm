@@ -31,6 +31,7 @@ get '/check_page_cache' => sub {
 
 get '/clear' => sub {
     cache_clear;
+    return undef;
 };
 
 put '/stash' => sub {
