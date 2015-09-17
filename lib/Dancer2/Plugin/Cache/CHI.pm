@@ -3,7 +3,6 @@ package Dancer2::Plugin::Cache::CHI;
 
 use strict;
 use warnings;
-
 use Carp;
 use CHI;
 
@@ -11,7 +10,7 @@ use Dancer2 0.140001;
 
 use Dancer2::Plugin;
 
-with 'Dancer2::Plugin';
+#with 'Dancer2::Plugin';
 
 register_hook 'before_create_cache';
 
@@ -111,7 +110,7 @@ use the main cache object.
 my %cache;
 my $cache_page; # actually hold the ref to the args
 my $cache_page_key_generator = sub {
-    return $_[0]->request->{path_info};
+    return $_[0]->request->path;
 };
 
 on_plugin_import {
@@ -203,15 +202,20 @@ register check_page_cache => sub {
             } qw/ Cache-Control Pragma /;
         }
 
-		if ( 'HASH' eq ref $cached ) {
-			$context->response->status( $cached->{status} );
-			$context->response->headers( $cached->{headers} );
-			$context->response->content( $cached->{content} );
-		}
-		else {
-			$context->response->content( $cached );
-		}
-		$context->response->is_halted( 1 );
+        $context->set_response(
+        	Dancer2::Core::Response->new(
+                is_halted => 1,
+                ref $cached eq 'HASH'
+                ?
+                (
+                    status       => $cached->{status},
+                    headers      => $cached->{headers},
+                    content      => $cached->{content}
+                )
+                :
+                ( content => $cached )
+            )
+		);
     };
 
     $dsl->app->add_hook( Dancer2::Core::Hook->new(
