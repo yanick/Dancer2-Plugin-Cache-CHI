@@ -10,8 +10,6 @@ use Dancer2 0.140001;
 
 use Dancer2::Plugin;
 
-#with 'Dancer2::Plugin';
-
 register_hook 'before_create_cache';
 
 =head1 SYNOPSIS
@@ -195,10 +193,12 @@ register check_page_cache => sub {
 
             my $req =  $dsl->request;
 
+            no warnings 'uninitialized';
+
             return if grep {
                 # eval is there to protect from a regression in Dancer 1.31
                 # where headers can be undef
-                eval { defined $req->header($_) && $req->header($_) eq 'no-cache' }
+                eval { $req->header($_) eq 'no-cache' }
             } qw/ Cache-Control Pragma /;
         }
 
