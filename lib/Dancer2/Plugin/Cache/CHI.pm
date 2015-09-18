@@ -3,16 +3,12 @@ package Dancer2::Plugin::Cache::CHI;
 
 use strict;
 use warnings;
-no warnings qw/ uninitialized /;
-
 use Carp;
 use CHI;
 
 use Dancer2 0.140001;
 
 use Dancer2::Plugin;
-
-with 'Dancer2::Plugin';
 
 register_hook 'before_create_cache';
 
@@ -112,7 +108,7 @@ use the main cache object.
 my %cache;
 my $cache_page; # actually hold the ref to the args
 my $cache_page_key_generator = sub {
-    return $_[0]->request->{path_info};
+    return $_[0]->request->path;
 };
 
 on_plugin_import {
@@ -197,15 +193,17 @@ register check_page_cache => sub {
 
             my $req =  $dsl->request;
 
-            return if grep { 
+            no warnings 'uninitialized';
+
+            return if grep {
                 # eval is there to protect from a regression in Dancer 1.31
                 # where headers can be undef
                 eval { $req->header($_) eq 'no-cache' }
             } qw/ Cache-Control Pragma /;
         }
 
-        $context->response(
-            Dancer2::Core::Response->new(
+        $context->set_response(
+        	Dancer2::Core::Response->new(
                 is_halted => 1,
                 ref $cached eq 'HASH'
                 ?
@@ -217,7 +215,7 @@ register check_page_cache => sub {
                 :
                 ( content => $cached )
             )
-        );
+		);
     };
 
     $dsl->app->add_hook( Dancer2::Core::Hook->new(
