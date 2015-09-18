@@ -6,7 +6,7 @@ use warnings;
 use Carp;
 use CHI;
 
-use Dancer2 0.140001;
+use Dancer2 0.162000;
 
 use Dancer2::Plugin;
 
