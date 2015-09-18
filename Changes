@@ -8,6 +8,7 @@ Revision history for Dancer2::Plugin::Cache::CHI
  [DOCUMENTATION]
 
  [ENHANCEMENTS]
+ - Works with latest Dancer2 release (GH#7, girlwithglasses)
 
  [NEW FEATURES]
 
