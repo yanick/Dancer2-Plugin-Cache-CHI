@@ -22,4 +22,5 @@ t/hooks.t
 t/init-check-page-cache.t
 t/key-gen.t
 t/namespaces.t
+xt/release/pause-permissions.t
 xt/release/unused-vars.t
