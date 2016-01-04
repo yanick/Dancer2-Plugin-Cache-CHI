@@ -6,8 +6,6 @@ use warnings;
 use Carp;
 use CHI;
 
-use Dancer2 0.162000;
-
 use Dancer2::Plugin;
 
 register_hook 'before_create_cache';
@@ -108,7 +106,7 @@ use the main cache object.
 my %cache;
 my $cache_page; # actually hold the ref to the args
 my $cache_page_key_generator = sub {
-    return $_[0]->request->path;
+    return $_[0]->app->request->path;
 };
 
 on_plugin_import {
@@ -147,10 +145,10 @@ sub _create_cache {
     my $namespace = shift;
     my $args = shift || {};
 
-    $dsl->execute_hook( 'before_create_cache' );
+    $dsl->execute_hook( 'plugin.cache_chi.before_create_cache' );
 
     my %setting = %{
-        $dsl->dancer_app->config->{plugins}{'Cache::CHI'} || {}
+        $dsl->app->config->{plugins}{'Cache::CHI'} || {}
     };
 
     $setting{namespace} = $namespace if defined $namespace;
@@ -191,7 +189,7 @@ register check_page_cache => sub {
 
         if ( $honor_no_cache ) {
 
-            my $req =  $dsl->request;
+            my $req =  $dsl->app->request;
 
             no warnings 'uninitialized';
 
