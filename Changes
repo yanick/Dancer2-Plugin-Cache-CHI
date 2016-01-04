@@ -1,6 +1,9 @@
 Revision history for Dancer2::Plugin::Cache::CHI
 
 {{$NEXT}}
+  - Make the plugin compatible with the upcoming backward-compatible
+        interface. (GH#8, Peter Mottram)
+
   [ API CHANGES ]
 
   [ BUG FIXES ]
