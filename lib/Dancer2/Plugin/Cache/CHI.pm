@@ -5,10 +5,160 @@ use strict;
 use warnings;
 use Carp;
 use CHI;
+use List::MoreUtils qw/ any /;
 
 use Dancer2::Plugin;
 
-register_hook 'before_create_cache';
+plugin_hooks 'before_create_cache';
+
+# actually hold the ref to the args
+has _cache_page => (
+    is        => 'rw',
+    clearer   => 'clear_cache_page',
+    predicate => 'has_cache_page',
+);
+
+has cache_page_key_generator => (
+    is             => 'rw',
+    lazy           => 1,
+    plugin_keyword => 1,
+    default        => sub {
+        sub { $_[0]->app->request->path }
+    },
+);
+
+sub BUILD {
+    my $plugin = shift;
+
+    $plugin->app->add_hook(
+        Dancer2::Core::Hook->new(
+            name => 'after',
+            code => sub {
+                return unless $plugin->has_cache_page;
+
+                my $resp = shift;
+                $plugin->cache->set( $plugin->cache_page_key_generator->($plugin),
+                    {
+                        status      => $resp->status,
+                        headers     => $resp->headers_to_array,
+                        content     => $resp->content
+                    },
+                    @{$plugin->_cache_page},
+                );
+
+                $plugin->clear_cache_page;
+            }
+    ));
+
+    $plugin->app->add_hook(
+        Dancer2::Core::Hook->new(
+            name => 'before',
+            code => sub {
+                $plugin->clear_cache_page;
+            }
+    ));
+};
+
+has _caches => (
+    is      => 'ro',
+    lazy    => 1,
+    default => sub {
+        {}
+    },
+);
+
+has caches_with_honor => (
+    is      => 'ro',
+    default => sub{ {} },
+);
+
+plugin_keywords 'cache';
+
+sub cache {
+    my( $self, $namespace ) = @_;
+    $namespace //= '';
+    return $self->_caches->{$namespace} ||= _create_cache( $self, $namespace, @_ );
+};
+
+sub _create_cache {
+    my( $dsl, $namespace, $args ) = @_;
+    $args ||= {};
+
+    $dsl->execute_hook( 'plugin.cache_chi.before_create_cache' );
+
+    my %setting = ( %{ $dsl->config }, %$args );
+
+    $setting{namespace} //= $namespace;
+
+    $dsl->caches_with_honor->{$namespace} = delete $setting{honor_no_cache};
+
+    return CHI->new(%setting);
+}
+
+
+plugin_keywords check_page_cache => sub {
+    my $dsl = shift;
+
+    my $hook = sub {
+        my $context = shift;
+
+        # Instead halt() now we use a more correct method - setting of a
+        # response to Dancer2::Core::Response object for a more correct returning of
+        # some HTTP headers (X-Powered-By, Server)
+
+        my $cached = cache($dsl)->get( $dsl->cache_page_key_generator->($dsl) )
+            or return;
+
+        if ( $dsl->caches_with_honor->{''} ) {
+
+            my $req =  $dsl->app->request;
+
+            no warnings 'uninitialized';
+
+            return if any {
+                $req->header($_) eq 'no-cache'
+            } qw/ Cache-Control Pragma /;
+        }
+
+        $context->set_response(
+        	Dancer2::Core::Response->new(
+                is_halted => 1,
+                ref $cached eq 'HASH'
+                ?
+                ( map { $_ => $cached->{$_} } qw/ status headers content / )
+                :
+                ( content => $cached )
+            )
+		);
+    };
+
+    $dsl->app->add_hook( Dancer2::Core::Hook->new(
+        name => 'before',
+        code => $hook,
+    ));
+};
+
+plugin_keywords cache_page => sub {
+    my ( $plugin, $content, @args ) = @_;
+
+    $plugin->_cache_page(\@args);
+
+    return $content;
+};
+
+plugin_keywords cache_page_key => sub { $_[0]->cache_page_key_generator->($_[0]) };
+
+for my $method ( qw/ set get remove clear compute / ) {
+    plugin_keywords "cache_$method" => sub {
+        my $plugin = shift;
+        $plugin->cache->$method(@_);
+    }
+}
+
+1;
+
+__END__
+
 
 =head1 SYNOPSIS
 
@@ -103,67 +253,6 @@ use the main cache object.
 
 =cut
 
-my %cache;
-my $cache_page; # actually hold the ref to the args
-my $cache_page_key_generator = sub {
-    return $_[0]->app->request->path;
-};
-
-on_plugin_import {
-    my $dsl = shift;
-
-    $dsl->app->add_hook(
-        Dancer2::Core::Hook->new(
-            name => 'after',
-            code => sub {
-                return unless $cache_page;
-
-                my $resp = shift;
-                cache($dsl)->set( $cache_page_key_generator->($dsl),
-                    {
-                        status      => $resp->status,
-                        headers     => $resp->headers_to_array,
-                        content     => $resp->content
-                    },
-                    @$cache_page,
-                );
-
-                $cache_page = undef;
-            }
-    ));
-};
-
-register cache => sub {
-    my $dsl = shift;
-    return  $cache{$_[0]//''} ||= _create_cache( $dsl, @_ );
-};
-
-my $honor_no_cache = 0;
-
-sub _create_cache {
-    my $dsl = shift;
-    my $namespace = shift;
-    my $args = shift || {};
-
-    $dsl->execute_hook( 'plugin.cache_chi.before_create_cache' );
-
-    my %setting = %{
-        $dsl->app->config->{plugins}{'Cache::CHI'} || {}
-    };
-
-    $setting{namespace} = $namespace if defined $namespace;
-
-    while( my ( $k, $v ) = each %$args ) {
-        $setting{$k} = $v;
-    }
-
-    $honor_no_cache = delete $setting{honor_no_cache}
-        if exists $setting{honor_no_cache};
-
-    return CHI->new(%setting);
-}
-
-
 =head2 check_page_cache
 
 If invoked, returns the cached response of a route, if available.
@@ -174,54 +263,6 @@ cached content. Caveat emptor.
 
 =cut
 
-register check_page_cache => sub {
-    my $dsl = shift;
-
-    my $hook = sub {
-        my $context = shift;
-
-        # Instead halt() now we use a more correct method - setting of a
-        # response to Dancer2::Core::Response object for a more correct returning of
-        # some HTTP headers (X-Powered-By, Server)
-
-        my $cached = cache($dsl)->get( $cache_page_key_generator->($dsl) )
-            or return;
-
-        if ( $honor_no_cache ) {
-
-            my $req =  $dsl->app->request;
-
-            no warnings 'uninitialized';
-
-            return if grep {
-                # eval is there to protect from a regression in Dancer 1.31
-                # where headers can be undef
-                eval { $req->header($_) eq 'no-cache' }
-            } qw/ Cache-Control Pragma /;
-        }
-
-        $context->set_response(
-        	Dancer2::Core::Response->new(
-                is_halted => 1,
-                ref $cached eq 'HASH'
-                ?
-                (
-                    status       => $cached->{status},
-                    headers      => $cached->{headers},
-                    content      => $cached->{content}
-                )
-                :
-                ( content => $cached )
-            )
-		);
-    };
-
-    $dsl->app->add_hook( Dancer2::Core::Hook->new(
-        name => 'before',
-        code => $hook,
-    ));
-};
-
 =head2 cache_page($content, $expiration)
 
 Caches the I<$content> to be served to subsequent requests.
@@ -231,16 +272,6 @@ The I<$expiration> parameter is optional.
 
 =cut
 
-register cache_page => sub {
-    shift;
-
-    my ( $content, @args ) = @_;
-
-    $cache_page = \@args;
-
-    return $content;
-};
-
 =head2 cache_page_key
 
 Returns the cache key used by 'C<cache_page>'. Defaults to
@@ -248,12 +279,6 @@ to the request's I<path_info>, but can be modified via
 I<cache_page_key_generator>.
 
 =cut
-
-
-register cache_page_key => sub {
-    shift;
-    return $cache_page_key_generator->();
-};
 
 =head2 cache_page_key_generator( \&sub )
 
@@ -268,11 +293,6 @@ hostname and path_info (useful to deal with multi-machine applications):
 
 =cut
 
-register cache_page_key_generator => sub {
-    shift;
-    $cache_page_key_generator = shift;
-};
-
 =head2 cache_set, cache_get, cache_remove, cache_clear, cache_compute
 
 Shortcut to the cache's object methods.
@@ -285,13 +305,6 @@ Shortcut to the cache's object methods.
 See the L<CHI> documentation for further info on these methods.
 
 =cut
-
-for my $method ( qw/ set get remove clear compute / ) {
-    register 'cache_'.$method => sub {
-        my $dsl = shift;
-        return cache($dsl)->$method( @_ );
-    }
-}
 
 =head1 HOOKS
 
@@ -312,11 +325,6 @@ Useful, for example, to change the cache's configuration at run time:
 
 =cut
 
-register_plugin for_versions => [1,2];
-
-1;
-
-__END__
 
 =head1 SEE ALSO
 
