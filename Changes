@@ -2,7 +2,6 @@ Revision history for Dancer2::Plugin::Cache::CHI
 
 {{$NEXT}}
   [ API CHANGES ]
-  - Change to work with new Dancer2::Plugin2 architecture. (GH#9)
 
   [ BUG FIXES ]
 
@@ -13,6 +12,13 @@ Revision history for Dancer2::Plugin::Cache::CHI
   [ NEW FEATURES ]
 
   [ STATISTICS ]
+
+2.0.0 2016-08-03
+  [ API CHANGES ]
+    - Change to work with new Dancer2::Plugin2 architecture. (GH#9)
+
+  [ STATISTICS ]
+    - code churn: 4 files changed, 162 insertions(+), 149 deletions(-)
 
 1.7.1 2016-01-04
   - Make the plugin compatible with the upcoming backward-compatible
