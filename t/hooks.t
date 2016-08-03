@@ -14,12 +14,12 @@ use HTTP::Request::Common;
         'Cache::CHI' => { driver => 'Memory', global => 1, expires_in => '1 min' },
     };
 
-    hook before_create_cache => sub {
+    hook 'plugin.cache_chi.before_create_cache' => sub {
         config->{plugins}{'Cache::CHI'}{namespace} = 'Foo';
     };
 
     get '/namespace' => sub {
-        cache->namespace;
+        cache()->namespace;
     };
 }
 
