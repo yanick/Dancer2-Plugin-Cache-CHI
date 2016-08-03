@@ -1,6 +1,7 @@
 package Dancer2::Plugin::Cache::CHI;
+our $AUTHORITY = 'cpan:YANICK';
 # ABSTRACT: Dancer plugin to cache response content (and anything else)
-
+$Dancer2::Plugin::Cache::CHI::VERSION = '2.0.0';
 use strict;
 use warnings;
 use Carp;
@@ -159,6 +160,17 @@ for my $method ( qw/ set get remove clear compute / ) {
 
 __END__
 
+=pod
+
+=encoding UTF-8
+
+=head1 NAME
+
+Dancer2::Plugin::Cache::CHI - Dancer plugin to cache response content (and anything else)
+
+=head1 VERSION
+
+version 2.0.0
 
 =head1 SYNOPSIS
 
@@ -251,8 +263,6 @@ the configuration, which values can be overriden by the optional arguments
 Note that all the other keywords (C<cache_page>, C<cache_set>, etc) will still
 use the main cache object.
 
-=cut
-
 =head2 check_page_cache
 
 If invoked, returns the cached response of a route, if available.
@@ -261,8 +271,6 @@ The C<path_info> attribute of the request is used as the key for the route,
 so the same route requested with different parameters will yield the same
 cached content. Caveat emptor.
 
-=cut
-
 =head2 cache_page($content, $expiration)
 
 Caches the I<$content> to be served to subsequent requests.
@@ -270,15 +278,11 @@ The headers and http status of the response are also cached.
 
 The I<$expiration> parameter is optional.
 
-=cut
-
 =head2 cache_page_key
 
 Returns the cache key used by 'C<cache_page>'. Defaults to
 to the request's I<path_info>, but can be modified via
 I<cache_page_key_generator>.
-
-=cut
 
 =head2 cache_page_key_generator( \&sub )
 
@@ -291,8 +295,6 @@ hostname and path_info (useful to deal with multi-machine applications):
         return join ':', request()->host, request()->path_info;
     };
 
-=cut
-
 =head2 cache_set, cache_get, cache_remove, cache_clear, cache_compute
 
 Shortcut to the cache's object methods.
@@ -304,8 +306,6 @@ Shortcut to the cache's object methods.
 
 See the L<CHI> documentation for further info on these methods.
 
-=cut
-
 =head1 HOOKS
 
 =head2 before_create_cache
@@ -315,16 +315,12 @@ its first use.
 
 Useful, for example, to change the cache's configuration at run time:
 
-
     use Sys::Hostname;
 
     # set the namespace to the current hostname
     hook before_create_cache => sub {
         config->{plugins}{'Cache::CHI'}{namespace} = hostname;
     };
-
-=cut
-
 
 =head1 SEE ALSO
 
@@ -333,5 +329,16 @@ Dancer2 Web Framework - L<Dancer2>
 L<CHI>
 
 L<Dancer::Plugin::Memcached> - plugin that heavily inspired this one.
+
+=head1 AUTHOR
+
+Yanick Champoux <yanick@cpan.org>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2013 by Yanick Champoux.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
