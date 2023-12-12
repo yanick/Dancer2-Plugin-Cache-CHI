@@ -4,6 +4,7 @@ Revision history for Dancer2::Plugin::Cache::CHI
   [ API CHANGES ]
 
   [ BUG FIXES ]
+  - Dancer2 v1+ wants response_header, not header
 
   [ DOCUMENTATION ]
 
